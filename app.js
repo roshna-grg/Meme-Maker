@@ -13,6 +13,7 @@ const downloadLink = document.getElementById('downloadLink');
 const topTextInput = document.getElementById('topText');
 const bottomTextInput = document.getElementById('bottomText');
 
+
 // Start webcam
 async function startVideo() {
     try {
@@ -34,10 +35,12 @@ function drawMeme(index) {
     const canvas = canvases[index];
     const ctx = contexts[index];
 
-    if (!canvas || !ctx) return;
+    const squareSize = 400;
 
-    // Clear previous drawing
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (!canvas || !ctx || video.videoWidth === 0) return;
+
+  // Clear canvas
+  ctx.clearRect(0, 0, squareSize, squareSize);
 
     const videoAspect = video.videoWidth / video.videoHeight;
     const squareAspect = 1;
@@ -59,7 +62,7 @@ function drawMeme(index) {
     }
 
     // Draw cropped square from video into square canvas
-    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, squareSize, squareSize);
 
 
     const topText = topTextInput.value.toUpperCase();
