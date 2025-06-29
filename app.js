@@ -18,6 +18,10 @@ async function startVideo() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
+
+        video.addEventListener('loadedmetadata', () => {
+            video.play();
+        });
     } catch (err) {
         alert('Please allow camera access to create your meme!');
         console.error(err);
@@ -55,7 +59,7 @@ function drawMeme(index) {
     }
 
     // Draw cropped square from video into square canvas
-    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.he);
+    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
 
 
     const topText = topTextInput.value.toUpperCase();
