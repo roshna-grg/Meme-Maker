@@ -13,16 +13,11 @@ const downloadLink = document.getElementById('downloadLink');
 const topTextInput = document.getElementById('topText');
 const bottomTextInput = document.getElementById('bottomText');
 
-
 // Start webcam
 async function startVideo() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         video.srcObject = stream;
-
-        video.addEventListener('loadedmetadata', () => {
-            video.play();
-        });
     } catch (err) {
         alert('Please allow camera access to create your meme!');
         console.error(err);
@@ -35,35 +30,13 @@ function drawMeme(index) {
     const canvas = canvases[index];
     const ctx = contexts[index];
 
-    const squareSize = 400;
+    if (!canvas || !ctx) return;
 
-  if (!canvas || !ctx || video.videoWidth === 0) return;
+    // Clear previous drawing
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Clear canvas
-  ctx.clearRect(0, 0, squareSize, squareSize);
-
-    const videoAspect = video.videoWidth / video.videoHeight;
-    const squareAspect = 1;
-
-    let sx, sy, sWidth, sHeight;
-
-    if (videoAspect > squareAspect) {
-        // Wider video than square: crop sides
-        sHeight = video.videoHeight;
-        sWidth = sHeight;
-        sx = (video.videoWidth - sWidth) / 2;
-        sy = 0;
-    } else {
-        // Taller video than square: crop top & bottom
-        sWidth = video.videoWidth;
-        sHeight = sWidth;
-        sx = 0;
-        sy = (video.videoHeight - sHeight) / 2;
-    }
-
-    // Draw cropped square from video into square canvas
-    ctx.drawImage(video, sx, sy, sWidth, sHeight, 0, 0, squareSize, squareSize);
-
+    // Draw current video frame on the selected canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     const topText = topTextInput.value.toUpperCase();
     const bottomText = bottomTextInput.value.toUpperCase();
